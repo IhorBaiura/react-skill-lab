@@ -1,0 +1,13 @@
+{
+    "name": "react-skill-lab",
+    "version": "0.1.0",
+    "private": true,
+    "description": "A personal React monorepo for sharpening React skills, experimenting with new features, and building freestyle UI projects.",
+    "scripts": {
+      "dev": "pnpm --parallel --filter './apps/*' dev",
+      "build": "pnpm --recursive build",
+      "lint": "pnpm --recursive lint",
+      "typecheck": "pnpm --recursive typecheck"
+    },
+    "packageManager": "pnpm@latest"
+  }
