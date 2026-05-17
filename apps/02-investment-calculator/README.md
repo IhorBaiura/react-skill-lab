@@ -1,75 +1,60 @@
-# React + TypeScript + Vite
+# 02-investment-calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An investment growth calculator built with React and TypeScript. It is the second exercise in the [react-skill-lab](../../) monorepo, focused on forms, lifted state, and presenting computed data.
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Enter four values and see a year-by-year breakdown:
 
-## React Compiler
+- **Initial investment** — starting amount
+- **Annual investment** — added each year
+- **Expected return** — annual growth rate (%)
+- **Duration** — number of years
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+The results table shows investment value, yearly interest, total interest, and invested capital. Results are hidden until duration is greater than zero.
 
-Note: This will impact Vite dev & build performances.
+## Concepts practiced
 
-## Expanding the ESLint configuration
+- **Controlled inputs** — form fields driven by React state in `UserInput`
+- **Lifting state up** — `CalculatorState` and `onChange` live in `App.tsx`
+- **Conditional rendering** — validation message vs. results table
+- **Pure utilities** — `calculateInvestmentResults` and `Intl` currency formatting in `util/investment.ts`
+- **TypeScript** — shared `CalculatorState` interface passed as props
+- **React Compiler** — enabled via `babel-plugin-react-compiler` in this Vite app
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Project structure
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── App.tsx                      # State, validation, change handler
+├── util/
+│   └── investment.ts            # Projection logic and currency formatter
+├── components/
+│   ├── Header/                  # App title and logo
+│   ├── UserInput/               # Controlled number inputs
+│   └── Results/                 # Year-by-year results table
+└── index.tsx                    # App entry point
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+From this directory:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Command        | Description              |
+| -------------- | ------------------------ |
+| `pnpm dev`     | Start Vite dev server    |
+| `pnpm build`   | Type-check and build     |
+| `pnpm lint`    | Run ESLint               |
+| `pnpm preview` | Preview production build |
+
+From the monorepo root:
+
+```bash
+pnpm --filter 02-investment-calculator dev
 ```
+
+## Stack
+
+- React 19
+- TypeScript
+- Vite (with React Compiler)
