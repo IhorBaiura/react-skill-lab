@@ -1,21 +1,11 @@
-import { useState } from "react"
+import type { CalculatorState } from "../../App"
 
-const INITIAL_STATE = {
-  initialInvestments: 10000,
-  annualInvestments: 2500,
-  expectedReturn: 7,
-  duration: 10,
+interface UserInputProps {
+  state: CalculatorState
+  onChange: (fieldName: string, value: number) => void
 }
 
-export default function UserInput() {
-  const [investmentState, setInvestmentState] = useState(INITIAL_STATE)
-
-  const handleCahnge = (fieldName: string, value: number) =>
-    setInvestmentState((prevState) => ({
-      ...prevState,
-      [fieldName]: value,
-    }))
-
+export default function UserInput({ state, onChange }: UserInputProps) {
   return (
     <section id="user-input">
       <div className="input-group">
@@ -23,9 +13,9 @@ export default function UserInput() {
           <label>Initial Investments</label>
           <input
             type="number"
-            value={investmentState.initialInvestments}
+            value={state.initialInvestment}
             onChange={(e) =>
-              handleCahnge("initialInvestments", Number(e.target.value))
+              onChange("initialInvestment", Number(e.target.value))
             }
             required
           />
@@ -34,9 +24,9 @@ export default function UserInput() {
           <label>Annual Investments</label>
           <input
             type="number"
-            value={investmentState.annualInvestments}
+            value={state.annualInvestment}
             onChange={(e) =>
-              handleCahnge("annualInvestments", Number(e.target.value))
+              onChange("annualInvestment", Number(e.target.value))
             }
             required
           />
@@ -47,10 +37,8 @@ export default function UserInput() {
           <label>Expected Return</label>
           <input
             type="number"
-            value={investmentState.expectedReturn}
-            onChange={(e) =>
-              handleCahnge("expectedReturn", Number(e.target.value))
-            }
+            value={state.expectedReturn}
+            onChange={(e) => onChange("expectedReturn", Number(e.target.value))}
             required
           />
         </p>
@@ -58,8 +46,8 @@ export default function UserInput() {
           <label>Duration</label>
           <input
             type="number"
-            value={investmentState.duration}
-            onChange={(e) => handleCahnge("duration", Number(e.target.value))}
+            value={state.duration}
+            onChange={(e) => onChange("duration", Number(e.target.value))}
             required
           />
         </p>
