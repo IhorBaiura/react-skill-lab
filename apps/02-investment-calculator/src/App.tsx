@@ -20,6 +20,8 @@ const INITIAL_STATE: CalculatorState = {
 function App() {
   const [investmentState, setInvestmentState] = useState(INITIAL_STATE)
 
+  const isValid = investmentState.duration > 0
+
   const handleCahnge = (fieldName: string, value: number) =>
     setInvestmentState((prevState) => ({
       ...prevState,
@@ -30,7 +32,8 @@ function App() {
     <>
       <Header />
       <UserInput state={investmentState} onChange={handleCahnge} />
-      <Results state={investmentState} />
+      {!isValid && <p className="center">Enter the correct value of the duration</p>}
+      {isValid && <Results state={investmentState} />}
     </>
   )
 }
