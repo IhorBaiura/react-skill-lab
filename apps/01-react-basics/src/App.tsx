@@ -17,7 +17,12 @@ export interface GameTurns {
 
 export type GameBoardType = (PlayerSymbol | null)[][]
 
-const initialGameBoard: GameBoardType = [
+const PLAYERS = {
+  [PlayerSymbol.O]: "Player 1",
+  [PlayerSymbol.X]: "Player 2",
+}
+
+const INITIAL_GAME_BOARDS: GameBoardType = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
@@ -34,12 +39,25 @@ function deriveActivePlayer(gameTurns: GameTurns[]): Player {
   return player
 }
 
-function App() {
-  const [gameTurns, setGameTurns] = useState<GameTurns[]>([])
+function deriveWinner(gameBoard: GameBoardType, players): Player | null {
+  let winner = null
 
-  const activePlayer = deriveActivePlayer(gameTurns)
+  for (const combination of winning_combinations) {
+    const items = new Set<Player | null>()
+    for (const { row, col } of combination) {
+      items.add(gameBoard[row][col])
+    }
 
-  const gameBoard = [...initialGameBoard.map((row) => [...row])]
+    if (items.size == 1 && !items.has(null)) {
+      winner = players[[...items][0]]
+    }
+  }
+
+  return winner
+}
+
+function deriveGameBoard(gameTurns: GameTurns[]): GameBoardType {
+  const gameBoard = [...INITIAL_GAME_BOARDS.map((row) => [...row])]
 
   for (const {
     square: { row, col },
@@ -48,18 +66,18 @@ function App() {
     gameBoard[row][col] = player
   }
 
-  let winner = null
+  return gameBoard
+}
 
-  for (const combination of winning_combinations) {
-    const items = new Set()
-    for (const { row, col } of combination) {
-      items.add(gameBoard[row][col])
-    }
+function App() {
+  const [players, setPlayers] = useState(PLAYERS)
+  const [gameTurns, setGameTurns] = useState<GameTurns[]>([])
 
-    if (items.size == 1 && !items.has(null)) {
-      winner = [...items][0]
-    }
-  }
+  const activePlayer = deriveActivePlayer(gameTurns)
+
+  const gameBoard = deriveGameBoard(gameTurns)
+
+  const winner = deriveWinner(gameBoard, players)
 
   const hasDraw = gameTurns.length == 9 && !winner
 
@@ -76,19 +94,28 @@ function App() {
     ])
   }
 
+  const handlePlayerNameChange = (palyer: Player, newName: string) => {
+    setPlayers((prevState) => ({
+      ...prevState,
+      [palyer]: newName,
+    }))
+  }
+
   return (
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player
-            initialName="Player 1"
+            initialName={players[PlayerSymbol.O]}
             symbol={PlayerSymbol.O}
             isActive={activePlayer == PlayerSymbol.O}
+            onChangeName={handlePlayerNameChange}
           />
           <Player
-            initialName="Player 2"
+            initialName={players[PlayerSymbol.X]}
             symbol={PlayerSymbol.X}
             isActive={activePlayer == PlayerSymbol.X}
+            onChangeName={handlePlayerNameChange}
           />
         </ol>
         <GameBoard onSelectItem={cahngePlayer} board={gameBoard} />
