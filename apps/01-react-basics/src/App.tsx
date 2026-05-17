@@ -13,35 +13,33 @@ export interface GameTurns {
   player: Player
 }
 
+function deriveActivePlayer(gameTurns: GameTurns[]): Player {
+  let player: Player = PlayerSymbol.O
+
+  if (gameTurns.length > 0) {
+    player =
+      gameTurns[0].player == PlayerSymbol.O ? PlayerSymbol.X : PlayerSymbol.O
+  }
+
+  return player
+}
 
 function App() {
   const [gameTurns, setGameTurns] = useState<GameTurns[]>([])
-  const [activePlayer, setActivePlayer] = useState<Player>(PlayerSymbol.O)
+
+  const activePlayer = deriveActivePlayer(gameTurns)
 
   const cahngePlayer = (rowIdx: number, colIdx: number) => {
-    setActivePlayer((prevPlayer) =>
-      prevPlayer == PlayerSymbol.O ? PlayerSymbol.X : PlayerSymbol.O
-    )
-    setGameTurns((prevTurnState) => {
-      let player: Player = PlayerSymbol.O
-
-      if (prevTurnState.length > 0) {
-        player = prevTurnState[0].player == PlayerSymbol.O
-        ? PlayerSymbol.X
-        : PlayerSymbol.O
-      }
-
-      return [
-        {
-          square: {
-            row: rowIdx,
-            col: colIdx,
-          },
-          player
+    setGameTurns((prevTurnState) => [
+      {
+        square: {
+          row: rowIdx,
+          col: colIdx,
         },
-        ...prevTurnState,
-      ]
-    })
+        player: deriveActivePlayer(prevTurnState),
+      },
+      ...prevTurnState,
+    ])
   }
 
   return (
@@ -61,7 +59,7 @@ function App() {
         </ol>
         <GameBoard onSelectItem={cahngePlayer} turns={gameTurns} />
       </div>
-      <Log />
+      <Log turns={gameTurns} />
     </main>
   )
 }
