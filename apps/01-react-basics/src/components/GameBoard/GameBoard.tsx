@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { PlayerSymbol } from "../Palyer/PlayerSymbol"
+import type { GameTurns } from "../../App"
 
 const initialGameBoard: (PlayerSymbol | null)[][] = [
   [null, null, null],
@@ -7,16 +7,20 @@ const initialGameBoard: (PlayerSymbol | null)[][] = [
   [null, null, null],
 ]
 
-export default function GameBoard() {
-    const [gameBoard, setGameBoard] = useState(initialGameBoard)
+interface GameBoardProps {
+  onSelectItem: (rowIdx: number, colIdx: number) => void
+  turns: GameTurns[]
+}
 
-    const updateGameBoard = (row: number, col: number, symbol: PlayerSymbol) => {
-        setGameBoard(prevGameBoard => {
-            const newGameBoard = [...prevGameBoard.map(arr => [...arr])]
-            newGameBoard[row][col] = symbol
-            return newGameBoard
-        })
-    }
+export default function GameBoard({ onSelectItem, turns }: GameBoardProps) {
+  const gameBoard = [...initialGameBoard.map((row) => [...row])]
+
+  for (const {
+    square: { row, col },
+    player,
+  } of turns) {
+    gameBoard[row][col] = player
+  }
 
   return (
     <ol id="game-board">
@@ -25,7 +29,12 @@ export default function GameBoard() {
           <ol>
             {row.map((playerSymbol: PlayerSymbol | null, colIdx: number) => (
               <li key={colIdx}>
-                <button onClick={() => updateGameBoard(rowIdx, colIdx, 'X')}>{playerSymbol}</button>
+                <button
+                  onClick={() => onSelectItem(rowIdx, colIdx)}
+                  disabled={playerSymbol ? true : false}
+                >
+                  {playerSymbol}
+                </button>
               </li>
             ))}
           </ol>
