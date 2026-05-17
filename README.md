@@ -47,4 +47,3 @@ The repository may include experiments with:
 - React Router
 - Testing tools
 - Other React ecosystem libraries
-
