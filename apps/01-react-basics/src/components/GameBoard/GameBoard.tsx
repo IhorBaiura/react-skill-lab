@@ -1,30 +1,15 @@
 import { PlayerSymbol } from "../Palyer/PlayerSymbol"
-import type { GameTurns } from "../../App"
-
-const initialGameBoard: (PlayerSymbol | null)[][] = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-]
+import type { GameBoardType } from "../../App"
 
 interface GameBoardProps {
   onSelectItem: (rowIdx: number, colIdx: number) => void
-  turns: GameTurns[]
+  board: GameBoardType
 }
 
-export default function GameBoard({ onSelectItem, turns }: GameBoardProps) {
-  const gameBoard = [...initialGameBoard.map((row) => [...row])]
-
-  for (const {
-    square: { row, col },
-    player,
-  } of turns) {
-    gameBoard[row][col] = player
-  }
-
+export default function GameBoard({ onSelectItem, board }: GameBoardProps) {
   return (
     <ol id="game-board">
-      {gameBoard.map((row: (PlayerSymbol | null)[], rowIdx: number) => (
+      {board.map((row: (PlayerSymbol | null)[], rowIdx: number) => (
         <li key={rowIdx}>
           <ol>
             {row.map((playerSymbol: PlayerSymbol | null, colIdx: number) => (
