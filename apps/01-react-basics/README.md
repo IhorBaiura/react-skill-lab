@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# 01-react-basics
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A tic-tac-toe game built with React and TypeScript. It is the first exercise in the [react-skill-lab](../../) monorepo, focused on core React patterns rather than routing or external state libraries.
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Two players take turns on a 3×3 board (X and O).
+- Player names can be edited inline.
+- The active player is highlighted.
+- Wins and draws are detected; you can start a rematch.
+- A move log lists each turn in order.
 
-## React Compiler
+## Concepts practiced
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Components & props** — `Player`, `GameBoard`, `Log`, `GameOver`
+- **`useState`** — players, turn history, editing mode
+- **Derived state** — board, active player, and winner computed from `gameTurns` instead of stored separately
+- **Lifting state up** — game logic lives in `App.tsx`; children receive data and callbacks
+- **TypeScript** — shared types (`GameTurns`, `Player`), `const` objects instead of enums (`PlayerSymbol`), `erasableSyntaxOnly`-friendly syntax
 
-## Expanding the ESLint configuration
+## Project structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── App.tsx                 # Game state, win/draw logic, handlers
+├── winning_combinations.ts # Winning line definitions
+├── components/
+│   ├── Palyer/             # Player list item (name edit, active highlight)
+│   ├── GameBoard/          # Board rendering and cell clicks
+│   ├── Log/                # Turn history
+│   └── GameOver/           # Win/draw overlay and rematch
+└── index.tsx               # App entry point
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x"
-import reactDom from "eslint-plugin-react-dom"
+From this directory:
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `pnpm dev`      | Start Vite dev server    |
+| `pnpm build`    | Type-check and build     |
+| `pnpm lint`     | Run ESLint               |
+| `pnpm preview`  | Preview production build |
+
+From the monorepo root:
+
+```bash
+pnpm --filter 01-react-basics dev
 ```
+
+## Stack
+
+- React 19
+- TypeScript
+- Vite
