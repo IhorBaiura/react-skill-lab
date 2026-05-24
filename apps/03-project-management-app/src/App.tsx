@@ -2,10 +2,18 @@ import { useState } from "react"
 import NewProject from "./components/NewProject/NewProject"
 import NoProjectSelected from "./components/NoProjectSelected/NoProjectSelected"
 import ProjectsSidebar from "./components/ProjectsSidebar/ProjectsSidebar"
+import { v4 as uuid } from "uuid"
+
+export interface ProjectData {
+  title: string
+  description: string
+  dueDate: string
+  id?: string
+}
 
 export interface ProjectState {
   selectedProjectId: undefined | null | number
-  projects: unknown[]
+  projects: ProjectData[]
 }
 
 function App() {
@@ -21,12 +29,28 @@ function App() {
     }))
   }
 
+  function handleAddProject(projectData: ProjectData) {
+    setProjectState((prevState) => {
+      const id = uuid()
+      const newProject = {
+        ...projectData,
+        id,
+      }
+
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: [...prevState.projects, newProject],
+      }
+    })
+  }
+
   let content
 
   if (projectState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />
   } else if (projectState.selectedProjectId === null) {
-    content = <NewProject />
+    content = <NewProject onAdd={handleAddProject} />
   }
 
   return (

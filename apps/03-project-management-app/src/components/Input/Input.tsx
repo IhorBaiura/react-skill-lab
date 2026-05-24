@@ -1,11 +1,16 @@
+import type { Ref } from "react"
+
 interface InputProps {
   label: string
   textarea?: boolean
+  ref: Ref<HTMLInputElement | HTMLTextAreaElement>
+  type?: string
 }
 
 export default function Input({
   label,
   textarea = false,
+  ref,
   ...props
 }: InputProps) {
   const clsses =
@@ -16,9 +21,17 @@ export default function Input({
         {label}
       </label>
       {!textarea ? (
-        <input type="text" className={clsses} {...props} />
+        <input
+          ref={ref as Ref<HTMLInputElement>}
+          className={clsses}
+          {...props}
+        />
       ) : (
-        <textarea className={clsses} {...props} />
+        <textarea
+          ref={ref as Ref<HTMLTextAreaElement>}
+          className={clsses}
+          {...props}
+        />
       )}
     </p>
   )
