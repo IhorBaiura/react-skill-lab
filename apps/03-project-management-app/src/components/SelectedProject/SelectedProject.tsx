@@ -1,10 +1,15 @@
 import type { ProjectData } from "../../App"
+import Tasks from "../Tasks/Tesks"
 
 interface SelectedProjectProps {
   projectData: ProjectData
+  onDelete: (id: string) => void
 }
 
-export default function SelectedProject({ projectData }: SelectedProjectProps) {
+export default function SelectedProject({
+  projectData,
+  onDelete,
+}: SelectedProjectProps) {
   const date = new Date(projectData.dueDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -18,7 +23,10 @@ export default function SelectedProject({ projectData }: SelectedProjectProps) {
           <h1 className="text-3xl font-bold text-stone-600 mb-2">
             {projectData.title}
           </h1>
-          <button className="text-stone-600 hover:text-stone-950">
+          <button
+            className="text-stone-600 hover:text-stone-950"
+            onClick={() => onDelete(projectData.id as string)}
+          >
             Delete
           </button>
         </div>
@@ -27,7 +35,7 @@ export default function SelectedProject({ projectData }: SelectedProjectProps) {
           {projectData.description}
         </p>
       </header>
-      TASKS
+      <Tasks />
     </div>
   )
 }

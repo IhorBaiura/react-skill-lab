@@ -60,11 +60,22 @@ function App() {
     })
   }
 
+  function handleDeleteProject(id: string) {
+    setProjectState((prevState) => ({
+      ...prevState,
+      selectedProjectId: undefined,
+      projects: prevState.projects.filter((project) => project.id !== id),
+    }))
+  }
+
   const selectedProjectData = projectState.projects.find(
     (pr) => pr.id === projectState.selectedProjectId
   )
   let content = (
-    <SelectedProject projectData={selectedProjectData as ProjectData} />
+    <SelectedProject
+      projectData={selectedProjectData as ProjectData}
+      onDelete={handleDeleteProject}
+    />
   )
 
   if (projectState.selectedProjectId === undefined) {
