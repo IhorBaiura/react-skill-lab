@@ -3,6 +3,7 @@ import NewProject from "./components/NewProject/NewProject"
 import NoProjectSelected from "./components/NoProjectSelected/NoProjectSelected"
 import ProjectsSidebar from "./components/ProjectsSidebar/ProjectsSidebar"
 import { v4 as uuid } from "uuid"
+import SelectedProject from "./components/SelectedProject/SelectedProject"
 
 export interface ProjectData {
   title: string
@@ -12,7 +13,7 @@ export interface ProjectData {
 }
 
 export interface ProjectState {
-  selectedProjectId: undefined | null | number
+  selectedProjectId: undefined | null | string
   projects: ProjectData[]
 }
 
@@ -21,6 +22,13 @@ function App() {
     selectedProjectId: undefined,
     projects: [],
   })
+
+  function handleSelectProject(id: string) {
+    setProjectState((prevState) => ({
+      ...prevState,
+      selectedProjectId: id,
+    }))
+  }
 
   function handleStartAddProject() {
     setProjectState((prevState) => ({
@@ -52,7 +60,12 @@ function App() {
     })
   }
 
-  let content
+  const selectedProjectData = projectState.projects.find(
+    (pr) => pr.id === projectState.selectedProjectId
+  )
+  let content = (
+    <SelectedProject projectData={selectedProjectData as ProjectData} />
+  )
 
   if (projectState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />
@@ -70,6 +83,8 @@ function App() {
       <ProjectsSidebar
         onStartAddProject={handleStartAddProject}
         projects={projectState.projects}
+        onSelect={handleSelectProject}
+        selectedProjectId={projectState.selectedProjectId as string}
       />
       {content}
     </main>
