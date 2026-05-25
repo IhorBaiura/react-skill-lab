@@ -1,14 +1,20 @@
-import type { ProjectData } from "../../App"
+import type { ProjectData, Task } from "../../App"
 import Tasks from "../Tasks/Tesks"
 
 interface SelectedProjectProps {
   projectData: ProjectData
   onDelete: (id: string) => void
+  onAddTask: (task: string) => void
+  onDeleteTask: (taskId: string) => void
+  tasks: Task[]
 }
 
 export default function SelectedProject({
   projectData,
   onDelete,
+  onAddTask,
+  onDeleteTask,
+  tasks,
 }: SelectedProjectProps) {
   const date = new Date(projectData.dueDate).toLocaleDateString("en-US", {
     year: "numeric",
@@ -35,7 +41,7 @@ export default function SelectedProject({
           {projectData.description}
         </p>
       </header>
-      <Tasks />
+      <Tasks tasks={tasks} onAddTask={onAddTask} onDeleteTask={onDeleteTask} />
     </div>
   )
 }

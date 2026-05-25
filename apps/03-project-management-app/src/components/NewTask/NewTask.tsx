@@ -1,10 +1,20 @@
 import { useState, type ChangeEvent } from "react"
 
-export default function NewTask() {
-  const [currentTask, setCurrentTask] = useState<string>()
+interface NewTaskProps {
+  onAddTask: (task: string) => void
+}
+
+export default function NewTask({ onAddTask }: NewTaskProps) {
+  const [currentTask, setCurrentTask] = useState<string>("")
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     setCurrentTask(event.target.value)
+  }
+
+  function handleAddTask() {
+    if (currentTask.trim() === "") return
+    onAddTask(currentTask)
+    setCurrentTask("")
   }
 
   return (
@@ -15,7 +25,12 @@ export default function NewTask() {
         onChange={handleChange}
         value={currentTask}
       />
-      <button className="text-stone-700 hover:text-stone-950">Add Task</button>
+      <button
+        className="text-stone-700 hover:text-stone-950"
+        onClick={handleAddTask}
+      >
+        Add Task
+      </button>
     </div>
   )
 }

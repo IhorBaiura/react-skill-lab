@@ -12,16 +12,47 @@ export interface ProjectData {
   id?: string
 }
 
+export interface Task {
+  id: string
+  projectId: string
+  task: string
+}
+
 export interface ProjectState {
   selectedProjectId: undefined | null | string
   projects: ProjectData[]
+  tasks: Task[]
 }
 
 function App() {
   const [projectState, setProjectState] = useState<ProjectState>({
     selectedProjectId: undefined,
     projects: [],
+    tasks: [],
   })
+
+  function handleAddTask(task: string) {
+    setProjectState((prevState) => {
+      const id = uuid()
+      const newTask: Task = {
+        task,
+        id,
+        projectId: prevState.selectedProjectId as string,
+      }
+
+      return {
+        ...prevState,
+        tasks: [newTask, ...prevState.tasks],
+      }
+    })
+  }
+
+  function handleDeleteTask(taskId: string) {
+    setProjectState((prevState) => ({
+      ...prevState,
+      tasks: prevState.tasks.filter((task) => task.id !== taskId),
+    }))
+  }
 
   function handleSelectProject(id: string) {
     setProjectState((prevState) => ({
@@ -75,6 +106,11 @@ function App() {
     <SelectedProject
       projectData={selectedProjectData as ProjectData}
       onDelete={handleDeleteProject}
+      onAddTask={handleAddTask}
+      onDeleteTask={handleDeleteTask}
+      tasks={projectState.tasks.filter(
+        (task) => task.projectId === projectState.selectedProjectId
+      )}
     />
   )
 
