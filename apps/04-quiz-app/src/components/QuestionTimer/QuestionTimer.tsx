@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react"
+import type { AnswerStateType } from "../../enums/answer_state"
 
 interface QuestionTimerPropa {
   timeout: number
   onTimeout: () => void
+  mode: AnswerStateType
 }
 
 export default function QuestionTimer({
   timeout,
   onTimeout,
+  mode,
 }: QuestionTimerPropa) {
   const [remainingTime, setRemainingTimeTime] = useState<number>(timeout)
 
@@ -30,5 +33,12 @@ export default function QuestionTimer({
     }
   }, [])
 
-  return <progress id="question-time" value={remainingTime} max={timeout} />
+  return (
+    <progress
+      id="question-time"
+      value={remainingTime}
+      max={timeout}
+      className={mode}
+    />
+  )
 }

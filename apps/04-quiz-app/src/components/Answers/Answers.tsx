@@ -15,7 +15,7 @@ export default function Answers({
   answerState,
   onSelect,
 }: AnswersProps) {
-  const shuffledAnswers = useRef<AnswersProps['answers']>(null)
+  const shuffledAnswers = useRef<AnswersProps["answers"]>(null)
 
   if (shuffledAnswers.current === null) {
     shuffledAnswers.current = [...answers].sort(() => Math.random() - 0.5)
@@ -38,7 +38,11 @@ export default function Answers({
 
         return (
           <li key={answer} className="answer">
-            <button onClick={() => onSelect(answer)} className={cssClss}>
+            <button
+              onClick={() => onSelect(answer)}
+              className={cssClss}
+              disabled={answerState !== AnswerState.UNANSWERED}
+            >
               {answer}
             </button>
           </li>

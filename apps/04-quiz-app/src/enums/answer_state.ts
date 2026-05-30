@@ -1,6 +1,6 @@
 export const AnswerState = {
   UNANSWERED: "unanswered",
-  SELECTED: "selected",
+  SELECTED: "answered",
   CORRECT: "correct",
   WRONG: "wrong",
 } as const
