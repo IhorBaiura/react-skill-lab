@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import { useRef } from "react"
 import type { Questions } from "../../questions"
 import { AnswerState, type AnswerStateType } from "../../enums/answer_state"
@@ -18,6 +19,7 @@ export default function Answers({
   const shuffledAnswers = useRef<AnswersProps["answers"]>(null)
 
   if (shuffledAnswers.current === null) {
+    // eslint-disable-next-line react-hooks/purity
     shuffledAnswers.current = [...answers].sort(() => Math.random() - 0.5)
   }
 
